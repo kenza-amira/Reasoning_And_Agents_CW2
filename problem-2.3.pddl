@@ -38,6 +38,7 @@
     (visited D)
     (visited G)
     (visited B)
+    (visited C)
     (agentIsAt I)
     )
     )
