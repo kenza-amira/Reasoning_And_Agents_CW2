@@ -1,0 +1,45 @@
+(define (problem travelling-322)
+    (:domain travelling3)
+    (:objects
+	car - car
+	A B C D E F G H I - location
+    )
+
+    (:init
+    (= (total-cost) 0)
+    (Agent agent)
+	(Car car)
+    (agentIsAt E)
+    (carIsAt car E)
+    (connectedByRoad A E)
+    (connectedByRoad E A)
+    (connectedByRoad A I)
+    (connectedByRoad I A)
+    (connectedByRoad H I)
+    (connectedByRoad I H)
+    (connectedByRoad B H)
+    (connectedByRoad H B)
+    (connectedByRoad H G)
+    (connectedByRoad G H)
+    (connectedByRoad G F)
+    (connectedByRoad F G)
+    (connectedByRoad D F)
+    (connectedByRoad F D)
+    (connectedByRoad C F)
+    (connectedByRoad F C)
+    (connectedByRoad D C)
+    (connectedByRoad C D)
+    (connectedByPlane A B)
+    (connectedByPlane B A)
+    (connectedByPlane A C)
+    (connectedByPlane C B)
+    )
+
+    (:goal (and
+    (visited D)
+    (visited B)
+    (<= (total-cost) 20)
+    )
+    )
+  
+)

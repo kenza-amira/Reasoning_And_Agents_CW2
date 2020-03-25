@@ -1,0 +1,77 @@
+PART 1
+
+Task 1.1
+
+Predicates:
+Car(x)  x is a car
+Agent(x)  x is an agent
+connectedByCar(X,Y) You can go from X to Y driving a car
+connectedByPlane(X,Y) You can go from X to Y by plane
+carIsAt(x) The car is at location x
+agentIsAt(x) The agent is at location x
+visited(x) The agent has visited X
+
+Initial State:
+Car(car) AND Agent(agent) AND carIsAt(E) AND agentIsAt(E) AND connectedByCar(E,A) AND connectedByCar(A,E)
+AND connectedByCar(A,I) AND connectedByCar(I,A) AND connectedByCar(I,H) AND connectedByCar(H,I)
+AND connectedByCar(H,B) AND connectedByCar(B,H) AND connectedByCar(H,G) AND connectedByCar(G,H)
+AND connectedByCar(G,F) AND connectedByCar(F,G) AND connectedByCar(D,F) AND connectedByCar(F,D)
+AND connectedByCar(F,C) AND connectedByCar(C,F) AND connectedByCar(D,C) AND connectedByCar(C,D)
+AND connectedByPlane(C,B) AND connectedByPlane(A,C) AND connectedByPlane(B,A) AND connectedByPlane (A,B)
+
+Goal State:
+Agent(agent) AND agentIsAt(E) AND visited(D)
+
+Task 1.2
+Action(Fly(agent,from,to)) 
+PRECONDITIONS: Agent(agent) AND agentIsAt(from) AND connectedByPlane(from,to)
+EFFECTS: Not(agentIsAt(from)) AND agentIsAt(to)
+
+Action(Drive(agent,car,from,to))
+PRECONDITIONS: Agent(agent) AND Car(car) AND agentIsAt(from) AND carIsAt(from) AND connectedByCar(from,to)
+EFFECTS: Not(agentIsAt(from)) AND Not(carIsAt(from)) AND carIsAt(to) AND agentIsAt(to)
+
+Action(Visit(agent,location))
+PRECONDITIONS: Agent(agent) AND agentIsAt(location) AND Not(visited(location))
+EFFECTS: visited(location)
+
+Task 1.3
+Initial State: Same as 1.1
+Goal State:
+Agent(agent) AND visited(B)
+
+Agent(agent) is already satisfied by the initial state. There's only one action that can satisfy visited(B)
+and that is Visit(agent,B).
+
+Visit(agent,B) gives us a new goal which is non other than the preconditions, i.e: Agent(agent) AND
+agentIsAt(B) and Not(visited(B)).
+
+Once again, Agent(agent) is satisfied by the initial state and so is Not(visited(B)). However to satisfy
+agentIsAt(B) we will use the action Fly(agent,loc,B).
+
+This gives us another goal (still the preconditions) which is:Agent(agent) AND agentIsAt(oc) 
+AND connectedByPlane(loc,B).
+
+Agent(agent) is satisfied by the initial state. However to satisfy the other preconditions we will use the
+action Drive(agent,from,loc). This gives us the following preconditions: Agent(agent) AND Car(car) AND
+agentIsAt(from) AND carIsAt(from) AND connectedByCar(from,loc)
+
+Agent(agent) and Car(car) are already satisfied by the initial state. We set A as loc and E as from. agentIsAt(E),
+carIsAt(E) and connectedByCar(E) are therefore also satisfied by the initial state. We do not have any other
+preconditions to satisfy hence we have a final plane.
+
+Final plan:
+Drive(agent,car,E,A) -> Fly(agent,A,B) -> Visit(agent,B) 
+
+PART 4
+
+PDDL could still be useful. In fact since version 3.0 it supports preferences through the "preference" statement
+We could therefore come up with a plan with multiple preferences: For example:
+(preference (always (eco-friendly flight))) that indicates indicates that the user prefers that the flight should be
+echo-friendly at each state of the plan. We can then compute the quality of the plan based on the number of satisfied
+preferences, using the expression "is violated<preference>" within the metric function. For example:
+(:metric minimize (+ (* 1 (is-violated eco-friendly flight)) (* 3 (is-violated short journey))))
+For this example, the second preference has a higher penalty (3 instead of 1). So depending on the user,
+we could set different penalties according to the preferences of the user.
+
+(Found the preference statement here: https://en.wikipedia.org/wiki/Preference-based_planning)
